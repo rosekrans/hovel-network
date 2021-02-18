@@ -1,0 +1,3 @@
+# InfluxDB database directory excluded.
+influxdb/
+
