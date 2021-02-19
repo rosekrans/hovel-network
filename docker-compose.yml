@@ -12,6 +12,7 @@ services:
     - "$PWD/influxdb:/var/lib/influxdb"
     networks:
     - hovel-latency
+    restart: always
 
   grafana:
     image: "grafana/grafana:latest"
@@ -24,6 +25,7 @@ services:
     - "3000:3000"
     volumes:
     - "./config/grafana/provisioning:/etc/grafana/provisioning"
+    restart: unless-stopped
 
   telegraf:
     image: "telegraf:1.16"
@@ -34,7 +36,8 @@ services:
     - .env
     volumes:
     - "./config/telegraf:/etc/telegraf"
-    - "./config/entrypoint_telegraf.sh:/entrypoint.sh"
+    - "./config/entrypoint_telegraf.sh:/entrypoint.sh" 
+    restart: unless-stopped
 
   speedtest:
     container_name: speedtest
@@ -43,6 +46,16 @@ services:
     - .env
     networks:
     - hovel-latency
+    depends_on:
+    - influxdb
+    restart: unless-stopped
+#    command: sh -c "/wait && python3 -u speedtestlat.py"
+#    environment:
+#      - WAIT_HOSTS=influxdb:8086
+#      - WAIT_HOSTS_TIMEOUT=300
+#      - WAIT_SLEEP_INTERVAL=30
+#      - WAIT_HOST_CONNECT_TIMEOUT=30
+
 
 
 volumes:

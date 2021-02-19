@@ -44,6 +44,7 @@ def logger(level, message):
     print(level, ":", datetime.now().strftime("%d/%m/%Y %H:%M:%S"), ":", message)
 
 def init_db():
+    time.sleep(10)
     try:
         databases = influxdb_client.get_list_database()
     except:
@@ -102,7 +103,6 @@ def format_for_influx(cliout):
 
 def main():
     db_initialized = False
-
     while(db_initialized == False):
         try:
             init_db()  # Setup the database if it does not already exist.
